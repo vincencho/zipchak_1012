@@ -96,9 +96,9 @@ const ProductDetail: React.FC = () => {
             <p className="text-2xl font-semibold text-blue-600 mb-4">${product.price.toFixed(2)}</p>
             <p className="text-gray-600 mb-6">{product.description}</p>
             <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Group Buy Status</h2>
-              <p className="mb-1">Time Left: {daysLeft}d {hoursLeft}h</p>
-              <p className="mb-1">Participants: {product.participants}/{product.minParticipants}</p>
+              <h2 className="text-xl font-semibold mb-2">그룹 구매 현황</h2>
+              <p className="mb-1">남은 시간: {daysLeft}일 {hoursLeft}시간</p>
+              <p className="mb-1">참여자: {product.participants}/{product.minParticipants}</p>
               <div className="w-full bg-gray-200 rounded-full h-2.5">
                 <div
                   className="bg-blue-600 h-2.5 rounded-full"
@@ -111,7 +111,7 @@ const ProductDetail: React.FC = () => {
               className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors inline-flex items-center"
             >
               <ShoppingCart size={20} className="mr-2" />
-              Join Group Buy
+              그룹 구매 참여하기
             </Link>
           </div>
         </div>

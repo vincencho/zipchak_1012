@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 interface Product {
   id: number;
@@ -10,6 +10,7 @@ interface Product {
 
 const OrderConfirmation: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [address, setAddress] = useState('');
@@ -38,7 +39,8 @@ const OrderConfirmation: React.FC = () => {
     e.preventDefault();
     // TODO: Implement order submission logic
     console.log('Order submitted:', { product, quantity, address });
-    // Redirect to order complete page or show confirmation message
+    // Redirect to order complete page
+    navigate('/order-complete', { state: { orderNumber: Math.floor(Math.random() * 1000000) } });
   };
 
   if (!product) {
@@ -47,7 +49,7 @@ const OrderConfirmation: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Order Confirmation</h1>
+      <h1 className="text-3xl font-bold mb-6">주문 확인</h1>
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/2 mb-4 md:mb-0">
@@ -59,7 +61,7 @@ const OrderConfirmation: React.FC = () => {
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1">
-                  Quantity
+                  수량
                 </label>
                 <input
                   type="number"
@@ -72,7 +74,7 @@ const OrderConfirmation: React.FC = () => {
               </div>
               <div className="mb-4">
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-                  Delivery Address
+                  배송 주소
                 </label>
                 <textarea
                   id="address"
@@ -85,14 +87,14 @@ const OrderConfirmation: React.FC = () => {
               </div>
               <div className="mb-4">
                 <p className="text-lg font-semibold">
-                  Total: ${(product.price * quantity).toFixed(2)}
+                  총 금액: ${(product.price * quantity).toFixed(2)}
                 </p>
               </div>
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
               >
-                Place Order
+                주문하기
               </button>
             </form>
           </div>

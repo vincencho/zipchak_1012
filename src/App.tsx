@@ -16,13 +16,14 @@ import OrderComplete from './pages/OrderComplete';
 import MyPage from './pages/MyPage';
 import CustomerSupport from './pages/CustomerSupport';
 import About from './pages/About';
+import StoreSetup from './pages/StoreSetup';
 
 function App() {
   return (
     <Router>
       <div className="flex flex-col min-h-screen bg-gray-100">
         <Header />
-        <main className="flex-grow pt-20"> {/* 수정: pt-16에서 pt-20으로 변경 */}
+        <main className="flex-grow pt-20">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -38,6 +39,7 @@ function App() {
             <Route path="/my-page/*" element={<MyPage />} />
             <Route path="/customer-support" element={<CustomerSupport />} />
             <Route path="/about" element={<About />} />
+            <Route path="/store-setup" element={<StoreSetup />} />
           </Routes>
         </main>
         <Footer />

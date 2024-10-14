@@ -1,11 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
-
-declare global {
-  interface Window {
-    naver: any;
-  }
-}
+import { Loader } from '@googlemaps/js-api-loader';
 
 interface LocationConfirmationProps {
   location: string;
@@ -15,41 +10,42 @@ interface LocationConfirmationProps {
 
 const LocationConfirmation: React.FC<LocationConfirmationProps> = ({ location, onConfirm, onBack }) => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_CLIENT_ID`;
-    script.async = true;
-    document.body.appendChild(script);
+    const loader = new Loader({
+      apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+      version: "weekly",
+    });
 
-    script.onload = () => {
-      if (mapRef.current) {
-        const map = new window.naver.maps.Map(mapRef.current, {
-          center: new window.naver.maps.LatLng(37.5665, 126.9780), // 서울 중심 좌표
-          zoom: 13,
-        });
-
-        // 사용자의 현재 위치를 가져와 지도에 표시
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition((position) => {
-            const userLocation = new window.naver.maps.LatLng(
-              position.coords.latitude,
-              position.coords.longitude
-            );
-            map.setCenter(userLocation);
-            new window.naver.maps.Marker({
-              position: userLocation,
-              map: map,
-            });
-          });
-        }
-      }
-    };
-
-    return () => {
-      document.body.removeChild(script);
-    };
+    loader.load().then(() => {
+      setMapLoaded(true);
+    });
   }, []);
+
+  useEffect(() => {
+    if (mapLoaded && mapRef.current) {
+      const map = new google.maps.Map(mapRef.current, {
+        center: { lat: 37.5665, lng: 126.9780 }, // Seoul coordinates
+        zoom: 13,
+      });
+
+      // Get user's current location
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          map.setCenter(userLocation);
+          new google.maps.Marker({
+            position: userLocation,
+            map: map,
+          });
+        });
+      }
+    }
+  }, [mapLoaded]);
 
   return (
     <div>
